@@ -31,3 +31,49 @@ def is_bst(node):
         return True
     
     return False
+
+def find(node, value):
+    if node is None:
+        return False
+
+    if node['value'] == value:
+        return True
+    elif node['value'] > value:
+        return find(node['left'], value)
+    else:
+        return find(node['right'], value)
+
+def smallest(node):
+    if node['left'] is None:
+        return node['value']
+    else:
+        smallest(node['left'])
+
+def delete(node, value):
+    if node is None:
+        return None
+
+    if node['value'] == value:
+        # Case 1: leaf node
+        if node['left'] is None and node['right'] is None:
+            return None
+        
+        # Case 2: single child
+        if node['left'] is None:
+            return node['right']
+        
+        if node['right'] is None:
+            return node['left']
+
+        # Case 3: middle node with both childs
+        smallest_on_right = smallest(node['right'])
+        node['right'] = delete(node['right'], smallest_on_right)
+        node['value'] = smallest_on_right
+        return node
+
+    elif node['value'] > value:
+        node['left'] = delete(node['left'], value)
+        return node
+    else: # node['value'] < value
+        node['right'] = delete(node['right'], value)
+        return node
